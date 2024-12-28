@@ -1,0 +1,186 @@
+<% include("../layouts/header.ejs") %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 0 0 20px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 70%;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 500;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e2e6ea;
+        }
+        img {
+            border-radius: 50%;
+            border: 2px solid #ddd;
+        }
+        .actions a {
+            margin: 0 5px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            color: #fff;
+            display: inline-block;
+            text-align: center;
+        }
+        .actions a.edit {
+            background-color: #28a745;
+        }
+        .actions a.delete {
+            background-color: #dc3545;
+        }
+        .actions a:hover {
+            opacity: 0.9;
+        }
+        .actions a.edit:hover {
+            background-color: #218838;
+        }
+        .actions a.delete:hover {
+            background-color: #c82333;
+        }
+        .no-users {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        @media (max-width: 768px) {
+            input[type="text"] {
+                width: 60%;
+            }
+            form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            input[type="submit"] {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Dashboard</h1>
+
+    <a href="/admin/new-user">Add New User</a>
+
+    <form method="get" action="/admin/dashboard">
+        <input type="text" name="search" placeholder="Search users" value="<%= searchQuery %>">
+        <input type="submit" value="Search">
+    </form>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile Number</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+        <% if (users.length > 0) { %>
+            <% users.forEach(user => { %>
+                <tr>
+                    <td><%= user.name %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.mobile %></td>
+                    <td><img src="/userimages/<%= user.image %>" alt="<%= user.image %>" style="width: 80px; height: 80px;"></td>
+                    <td class="actions">
+                        <a href="/admin/edit-user/<%= user._id %>" class="edit">Edit</a>
+                        <a href="/admin/delete-user?id=<%= user._id %>" class="delete">Delete</a>
+                    </td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="5" class="no-users">No Users Found</td>
+            </tr>
+        <% } %>
+    </table>
+
+    <a href="/admin/home">Go to Home</a>
+</div>
+
+<% include("../layouts/footer.ejs") %>
+
+</body>
+</html>
+
